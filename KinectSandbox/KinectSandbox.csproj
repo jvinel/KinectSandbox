@@ -81,6 +81,8 @@
     <Compile Include="Filters\DataFilterInput.cs" />
     <Compile Include="Filters\BitmapReadyEventArgs.cs" />
     <Compile Include="Filters\DataReadyEventArgs.cs" />
+    <Compile Include="Themes\LeftMarginMultiplierConverter.cs" />
+    <Compile Include="Themes\TreeViewItemExtensions.cs" />
     <Compile Include="Tools\LockBitmap.cs" />
     <Compile Include="Tools\Utility.cs" />
     <Compile Include="LogExtensions.cs" />
@@ -99,6 +101,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Themes\Styles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
