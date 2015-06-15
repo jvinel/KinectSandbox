@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KinectSandbox.Tools
+namespace KinectSandboxLib.Tools
 {
     /// <summary>
     /// Class created by Vano Maisuradze and published on Code Project web site.

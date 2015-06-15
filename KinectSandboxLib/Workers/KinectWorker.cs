@@ -2,26 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Windows.Media;
 using Microsoft.Kinect;
-using System.Windows.Media.Imaging;
 using System.Windows;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Diagnostics;
 using System.Threading;
 using System.Reflection;
-using KinectSandbox.Filters;
 using System.Drawing;
-using KinectSandbox.Tools;
+using KinectSandboxLib.Filters;
 
-namespace KinectSandbox.Workers
+namespace KinectSandboxLib.Workers
 {
     /// <summary>
     /// KinectWorker initialize communication with Kinect device.
     /// Receive Depth Frame from device and raise an event (OnDataReady) to call next filter to process data.
     /// </summary>
-    class KinectWorker : DataFilterInput
+    public class KinectWorker : DataFilterInput
     {
 
         /// <summary>
@@ -158,7 +155,7 @@ namespace KinectSandbox.Workers
         /// <param name="p">Origin point</param>
         /// <param name="width">Bounding box width</param>
         /// <param name="height">Bounding box height</param>
-        public void setBoundingBox(System.Windows.Point p, int width, int height)
+        public void setBoundingBox(System.Drawing.Point p, int width, int height)
         {
             this.StartPoint = p;
             this.Width = width;

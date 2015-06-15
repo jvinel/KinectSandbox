@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 
-namespace KinectSandbox.Filters
+namespace KinectSandboxLib.Filters
 {
     /// <summary>
     /// Event raised when a data filter has produce some output

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading;
 
-namespace KinectSandbox.Filters
+namespace KinectSandboxLib.Filters
 {
     public  class DataFilterInput
     {
@@ -37,7 +38,7 @@ namespace KinectSandbox.Filters
 
         }
 
-        private System.Windows.Point startPoint = new System.Windows.Point(0, 0);
+        private Point startPoint = new Point(0, 0);
         private int width = 640;
         private int height = 480;
 
@@ -53,7 +54,7 @@ namespace KinectSandbox.Filters
             set { this.height = value; }
         }
 
-        public System.Windows.Point StartPoint
+        public Point StartPoint
         {
             get { return this.startPoint; }
             set { this.startPoint = value; }

@@ -1,4 +1,4 @@
-﻿using KinectSandbox.Filters;
+﻿using KinectSandboxLib.Filters;
 using Microsoft.Kinect;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KinectSandbox.Workers
+namespace KinectSandboxLib.Workers
 {
     /// <summary>
     /// StabilizingWorker main goals is to cleanup Depth Frame received from a kinect device.

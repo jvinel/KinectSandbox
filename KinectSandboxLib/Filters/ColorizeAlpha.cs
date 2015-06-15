@@ -1,6 +1,6 @@
 ﻿using AForge.Imaging;
 using AForge.Imaging.Filters;
-using KinectSandbox.Tools;
+using KinectSandboxLib.Tools;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -8,7 +8,7 @@ using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 
-namespace KinectSandbox.Filters
+namespace KinectSandboxLib.Filters
 {
     /// <summary>
     /// Transform a grayscale 8bpp bitmap to a 24bpp rgb using gradient image provided

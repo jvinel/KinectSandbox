@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 
-namespace KinectSandbox.Filters
+namespace KinectSandboxLib.Filters
 {
     public abstract class DataFilter : DataFilterInput
     {

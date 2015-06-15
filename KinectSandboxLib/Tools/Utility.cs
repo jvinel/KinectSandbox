@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace KinectSandbox.Tools
+namespace KinectSandboxLib.Tools
 {
     /// <summary>
     /// Contains static tools used to work with data received

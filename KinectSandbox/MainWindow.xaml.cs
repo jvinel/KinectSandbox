@@ -1,6 +1,6 @@
-﻿using KinectSandbox.Filters;
-using KinectSandbox.Tools;
-using KinectSandbox.Workers;
+﻿using KinectSandboxLib.Filters;
+using KinectSandboxLib.Tools;
+using KinectSandboxLib.Workers;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -68,7 +68,7 @@ namespace KinectSandbox
 
         private int selectionWidth;
         private int selectionHeight;
-        private System.Windows.Point startPoint = new System.Windows.Point(0, 0);
+        private System.Drawing.Point startPoint = new System.Drawing.Point(0, 0);
         private int width = 640;
         private int height = 480;
 
@@ -442,7 +442,7 @@ namespace KinectSandbox
             if (this.kinectWorker != null)
             {
                 System.Windows.Point relativePoint = this.image.TransformToAncestor(this).Transform(new System.Windows.Point(0, 0));
-                System.Windows.Point top = new System.Windows.Point((int)(origMouseDownPoint.X - relativePoint.X), (int)(origMouseDownPoint.Y - relativePoint.Y));
+                System.Drawing.Point top = new System.Drawing.Point((int)(origMouseDownPoint.X - relativePoint.X), (int)(origMouseDownPoint.Y - relativePoint.Y));
                 this.startPoint = top;
                 this.height = this.selectionHeight;
                 this.width = this.selectionWidth;

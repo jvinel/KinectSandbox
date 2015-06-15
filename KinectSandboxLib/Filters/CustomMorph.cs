@@ -7,7 +7,7 @@ using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 
-namespace KinectSandbox.Filters
+namespace KinectSandboxLib.Filters
 {
     /// <summary>
     /// Merge two images in a single one.

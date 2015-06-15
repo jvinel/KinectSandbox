@@ -1,6 +1,6 @@
 ﻿using AForge.Imaging.Filters;
-using KinectSandbox.Filters;
-using KinectSandbox.Tools;
+using KinectSandboxLib.Filters;
+using KinectSandboxLib.Tools;
 using Microsoft.Kinect;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KinectSandbox.Workers
+namespace KinectSandboxLib.Workers
 {
     /// <summary>
     /// TopographicWorker main goals is to convert depth frame received from akinect device to a bitmap image.
