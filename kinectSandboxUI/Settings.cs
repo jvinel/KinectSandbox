@@ -40,7 +40,7 @@ namespace kinectSandboxUI
 
         [CategoryAttribute("Filtering"),
         DisplayName("Gradient"),
-        DescriptionAttribute("Gradient bitmap used to colorize image")]
+        DescriptionAttribute("Gradient bitmap used to colorize image.")]
         public string Gradient
         {
             get;
