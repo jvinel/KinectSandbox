@@ -69,6 +69,11 @@ namespace KinectSandbox.Workers
             //this.filtersSettings = new Dictionary<string, List<KeyValuePair<string, string>>>();
         }
 
+        /// <summary>
+        /// Start KinectWorker.
+        /// This method is launched in a separate thread, waiting to receive a new depth frame from kinect device.
+        /// And passing it to the next filter through OnDataReady event.
+        /// </summary>
         public void Start()
         {
 
@@ -80,10 +85,11 @@ namespace KinectSandbox.Workers
 
                 while (!this.requestStop)
                 {
+                    // Wait for autoreset event (raised when a new frame is received)
                     autoResetEvent.WaitOne();
-                    //this.Log().Debug("AutoReset Event received");
-                    //Bitmap bitmap = Utility.convertToBitmap(this.depthPixels, (int)this.StartPoint.X, (int)this.StartPoint.Y, (int)this.Height, (int)this.Width, (int)this.MinDepth, (int)this.MaxDepth);
-
+#if TRACE
+                    this.Log().Debug("AutoReset Event received");
+#endif
                     OnDataReady(new DataReadyEventArgs(this.depthPixels));
                     
                 }
@@ -92,7 +98,6 @@ namespace KinectSandbox.Workers
                 {
                     this.sensor.Stop();
                 }
-                //this.stopFilters();
             }
             catch (IOException)
             {
@@ -100,10 +105,18 @@ namespace KinectSandbox.Workers
             }
         }
 
+        /// <summary>
+        /// Boolean indicating if a Kinect Device is connected and in "Ready" state
+        /// </summary>
+        /// <returns></returns>
         public bool IsKinectReady()
         {
             return (null != this.sensor);
         }
+
+        /// <summary>
+        /// Stop the thread loop
+        /// </summary>
         public void Stop()
         {
             this.requestStop = true;
@@ -114,25 +127,28 @@ namespace KinectSandbox.Workers
         
         private void SensorDepthFrameReady(object sender, DepthImageFrameReadyEventArgs e)
         {
-            //this.Log().Debug("KW::Received frame from thread " + Thread.CurrentThread.ManagedThreadId);
-            //Console.WriteLine("KW::Received frame from thread " + Thread.CurrentThread.ManagedThreadId);
+#if TRACE
+            this.Log().Debug("Received frame from thread " + Thread.CurrentThread.ManagedThreadId);
+#endif
             using (DepthImageFrame depthFrame = e.OpenDepthImageFrame())
             {
                 if (depthFrame != null)
                 {
-                    //mutex.WaitOne();
                     // Copy the pixel data from the image to a temporary array
                     depthFrame.CopyDepthImagePixelDataTo(this.depthPixels);
-                    
-
-                    //this.data = this.convertToArray(this.depthPixels);
-                    //this.Log().Debug("Sending AutoReset Event");
+                    // Raise AutoReset event to call next filers (cf. Start method)                    
                     autoResetEvent.Set();
-                    //mutex.ReleaseMutex();
                 }
             }
         }
 
+        /// <summary>
+        /// Define boundng box of data to be treated.
+        /// Data outside this bounding box are ignored.
+        /// </summary>
+        /// <param name="p">Origin point</param>
+        /// <param name="width">Bounding box width</param>
+        /// <param name="height">Bounding box height</param>
         public void setBoundingBox(System.Windows.Point p, int width, int height)
         {
             this.StartPoint = p;
