@@ -9,6 +9,10 @@ using System.Text;
 
 namespace KinectSandbox.Filters
 {
+    /// <summary>
+    /// Merge two images in a single one.
+    /// Source percent is used to apply second image piksel onto the first one.
+    /// </summary>
     public class CustomMorph : BaseInPlaceFilter2
     {
         private double	sourcePercent = 0.50;
@@ -70,7 +74,9 @@ namespace KinectSandbox.Filters
             InitFormatTranslations( );
         }
 
-        // Initialize format translation dictionary
+        /// <summary>
+        /// Initialize format translation dictionary
+        /// </summary>
         private void InitFormatTranslations( )
         {
             formatTranslations[PixelFormat.Format8bppIndexed] = PixelFormat.Format8bppIndexed;

@@ -17,6 +17,10 @@ using KinectSandbox.Tools;
 
 namespace KinectSandbox.Workers
 {
+    /// <summary>
+    /// KinectWorker initialize communication with Kinect device.
+    /// Receive Depth Frame from device and raise an event (OnDataReady) to call next filter to process data.
+    /// </summary>
     class KinectWorker : DataFilterInput
     {
 
@@ -30,8 +34,14 @@ namespace KinectSandbox.Workers
         /// </summary>
         private DepthImagePixel[] depthPixels;
         
+        /// <summary>
+        /// Indicates if thread should stop
+        /// </summary>
         private bool requestStop = false;
 
+        /// <summary>
+        /// Event raised when a new depth frame is received from the Kinect device
+        /// </summary>
         public AutoResetEvent autoResetEvent;
 
         public KinectWorker()
@@ -65,8 +75,7 @@ namespace KinectSandbox.Workers
             }
             
             autoResetEvent = new AutoResetEvent(false);
-            //this.filters = new Dictionary<string, DataFilter>();
-            //this.filtersSettings = new Dictionary<string, List<KeyValuePair<string, string>>>();
+
         }
 
         /// <summary>

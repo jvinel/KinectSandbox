@@ -8,12 +8,23 @@ using System.Threading.Tasks;
 
 namespace KinectSandbox.Workers
 {
+    /// <summary>
+    /// StabilizingWorker main goals is to cleanup Depth Frame received from a kinect device.
+    /// </summary>
     public class StabilizingWorker : DataFilter
     {
-
+        /// <summary>
+        /// Cleanupped depth frame
+        /// </summary>
         private DepthImagePixel[] tempData;
+        /// <summary>
+        /// Minimum variation of depth for a specified point. Every variation below this threshold will be ignored
+        /// </summary>
         private short MinVariance { get; set; }
-
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="dataFilterInput"></param>
         public StabilizingWorker(DataFilterInput dataFilterInput)
             : base(dataFilterInput)
         {
@@ -65,7 +76,11 @@ namespace KinectSandbox.Workers
             // Pass bitmap generated to UI (or other filter)
             OnDataReady(new DataReadyEventArgs(tempData));
         }
-
+        /// <summary>
+        /// Check if depth specified is valid (between Min Depth and Max Depth settings)
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         private bool isValid(short value)
         {
             if ((value >= this.MinDepth) && (value <= this.MaxDepth))

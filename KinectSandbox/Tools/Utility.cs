@@ -10,9 +10,14 @@ using System.Windows;
 
 namespace KinectSandbox.Tools
 {
+    /// <summary>
+    /// Contains static tools used to work with data received
+    /// </summary>
     public class Utility
     {
-
+        /// <summary>
+        /// Palette used to generate Bitmap (8bpp grayscale indexed)
+        /// </summary>
         protected static ColorPalette palette;
         /// <summary>
         /// Convert a depthImagePixel array to a bitmap image. Only data inside selected area (defined by xOrigin, yOrigin, height and width) are considered.
@@ -61,7 +66,7 @@ namespace KinectSandbox.Tools
                     // Check depth regarding boundaries
                     if ((depth > minDepth) && (depth < maxDepth))
                     {
-                        int intensity = 255- (((depth - minDepth) * 255) / (maxDepth - minDepth));
+                        int intensity = 255 - (((depth - minDepth) * 255) / (maxDepth - minDepth));
                         // Scale intensity to a 0..255 interval
                         lockBitmap.SetPixel(x - xOrigin, y - yOrigin, Color.FromArgb(intensity, intensity, intensity));
 

@@ -12,6 +12,11 @@ using System.Threading.Tasks;
 
 namespace KinectSandbox.Workers
 {
+    /// <summary>
+    /// TopographicWorker main goals is to convert depth frame received from akinect device to a bitmap image.
+    /// It also adds isolines and colorize image (from 8bpp grayscale to 24 rgb) using gradient bitmap specified. 
+    /// 
+    /// </summary>
     public class TopographicWorker: DataFilter
     {
         /// <summary>
@@ -19,7 +24,10 @@ namespace KinectSandbox.Workers
         /// </summary>
         public Bitmap Gradient { get; set; }
 
-
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="dataFilterInput"></param>
         public TopographicWorker(DataFilterInput dataFilterInput)
             : base(dataFilterInput)
         {

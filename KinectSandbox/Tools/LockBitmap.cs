@@ -9,6 +9,12 @@ using System.Threading.Tasks;
 
 namespace KinectSandbox.Tools
 {
+    /// <summary>
+    /// Class created by Vano Maisuradze and published on Code Project web site.
+    /// http://www.codeproject.com/Tips/240428/Work-with-bitmap-faster-with-Csharp
+    /// Code published under CPOL license  http://www.codeproject.com/info/cpol10.aspx
+    /// 
+    /// </summary>
     public class LockBitmap
     {
         Bitmap source = null;
