@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KinectSandbox", "KinectSand
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KinectSandboxLib", "KinectSandboxLib\KinectSandboxLib.csproj", "{0E3763D7-4F9C-4852-B546-9DCC4FC17B20}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KinectSandboxUI", "kinectSandboxUI\KinectSandboxUI.csproj", "{0B5A47F9-C130-4F45-A072-555847058B62}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{0E3763D7-4F9C-4852-B546-9DCC4FC17B20}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E3763D7-4F9C-4852-B546-9DCC4FC17B20}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E3763D7-4F9C-4852-B546-9DCC4FC17B20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B5A47F9-C130-4F45-A072-555847058B62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B5A47F9-C130-4F45-A072-555847058B62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B5A47F9-C130-4F45-A072-555847058B62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B5A47F9-C130-4F45-A072-555847058B62}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
