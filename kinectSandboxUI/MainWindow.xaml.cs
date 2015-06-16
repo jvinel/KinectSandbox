@@ -13,7 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace kinectSandboxUI
+
+namespace KinectSandboxUI
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -30,6 +31,11 @@ namespace kinectSandboxUI
         {
             Settings testGrid = new Settings();
             wpgMyControl.SelectedObject = testGrid;
+        }
+
+        private void wpgMyControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            Console.WriteLine("Test");
         }
     }
 }
