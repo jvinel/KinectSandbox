@@ -31,6 +31,7 @@ namespace KinectSandboxUI
         {
             Settings testGrid = new Settings();
             wpgMyControl.SelectedObject = testGrid;
+            
         }
 
         private void wpgMyControl_Loaded(object sender, RoutedEventArgs e)

@@ -4,21 +4,19 @@
         xmlns:avalonDock="http://schemas.xceed.com/wpf/xaml/avalondock"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" 
         xmlns:Properties="clr-namespace:kinectSandboxUI.Properties" 
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         x:Class="KinectSandboxUI.MainWindow"
         Title="MainWindow" Height="600" Width="800" Loaded="Window_Loaded">
     <Window.Resources>
     </Window.Resources>
     <Grid>
-        <avalonDock:DockingManager x:Name="dockingManager">
-            <avalonDock:DockingManager.Theme>
-                <avalonDock:Vs2013DarkTheme />
-            </avalonDock:DockingManager.Theme>
+        <avalonDock:DockingManager x:Name="dockingManager" BorderThickness="2">
             <avalonDock:LayoutRoot>
                 <avalonDock:LayoutPanel Orientation="Horizontal">
                     <avalonDock:LayoutDocumentPane/>
                     <avalonDock:LayoutAnchorablePane DockWidth="220">
                         <avalonDock:LayoutAnchorable Title="Settings" CanClose="False" CanHide="False">
-                            <xctk:PropertyGrid HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" x:Name="wpgMyControl" Background="White" Foreground="#FFFF0303" BorderBrush="#FF2D2D30" Loaded="wpgMyControl_Loaded" >
+                            <xctk:PropertyGrid HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" x:Name="wpgMyControl"  Loaded="wpgMyControl_Loaded" SelectedObject="{Binding}" >
                                 
                             </xctk:PropertyGrid>
                         </avalonDock:LayoutAnchorable>

@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 namespace KinectSandboxUI
@@ -63,6 +64,15 @@ namespace KinectSandboxUI
         DescriptionAttribute("Rotate image generated for output display")]
         [ItemsSource(typeof(RotationItemsSource))]
         public int Rotation
+        {
+            get;
+            set;
+        }
+
+        [Category("Output"),
+        DisplayName("Margin"),
+        DescriptionAttribute("Margin of image generated for output display")]
+        public Thickness  Margin
         {
             get;
             set;
