@@ -15,7 +15,7 @@ namespace KinectSandboxLib.Filters
 
         protected DataFilterInput dataFilterInput;
 
-  
+
         protected bool processRunning = false;
 
         private DepthImagePixel[] inputData;
@@ -24,7 +24,7 @@ namespace KinectSandboxLib.Filters
         {
             autoResetEvent = new AutoResetEvent(false);
             this.dataFilterInput = dataFilterInput;
-            this.dataFilterInput.DataReady+=new EventHandler<DataReadyEventArgs>(dataFilterInput_DataReady);
+            this.dataFilterInput.DataReady += new EventHandler<DataReadyEventArgs>(dataFilterInput_DataReady);
         }
 
         public void Start()
@@ -32,29 +32,28 @@ namespace KinectSandboxLib.Filters
             this.Log().Debug("Filter started with thread " + Thread.CurrentThread.ManagedThreadId);
             while (!this.requestStop)
             {
+#if TRACE
+                this.Log().Debug("Waiting for next event.");
+#endif
                 autoResetEvent.WaitOne();
-                #if TRACE
+#if TRACE
                 this.Log().Debug("New data received from previous filter.");
-                #endif
-
-                if (!processRunning)
+#endif
+                
+                if ((!this.requestStop) && (!processRunning))
                 {
-                    #if TRACE
+#if TRACE
                     this.Log().Debug("Launch process on new data.");
-                    #endif
-                    
+#endif
+
                     this.processRunning = true;
                     this.Process(inputData);
                 }
-                Thread.Sleep(10);
-            }
-        }
 
-        public void Stop()
-        {
-            this.requestStop = true;
-            this.dataFilterInput.DataReady -= new EventHandler<DataReadyEventArgs>(dataFilterInput_DataReady);
-            autoResetEvent.Set();
+
+            }
+            this.Log().Debug("Filter ended with thread " + Thread.CurrentThread.ManagedThreadId);
+
         }
 
         protected abstract void Process(DepthImagePixel[] sourceData);
@@ -63,6 +62,11 @@ namespace KinectSandboxLib.Filters
 
         private void dataFilterInput_DataReady(object sender, DataReadyEventArgs e)
         {
+            if (e.ShouldStop) {
+                this.requestStop = true;
+                OnDataReady(e);
+            }
+            
             if (!this.processRunning)
             {
                 this.inputData = e.Data;
@@ -72,14 +76,15 @@ namespace KinectSandboxLib.Filters
 
         protected override void OnDataReady(DataReadyEventArgs e)
         {
-            this.processRunning = false;
+
             base.OnDataReady(e);
+            this.processRunning = false;
         }
 
         protected override void OnOutputDataReady(BitmapReadyEventArgs e)
         {
-            this.processRunning = false;
             base.OnOutputDataReady(e);
+            this.processRunning = false;
         }
     }
 }

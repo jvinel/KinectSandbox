@@ -30,7 +30,7 @@ namespace KinectSandbox
     public partial class MainWindow : Window
     {
         //List<System.Windows.Media.Color> initColors = new List<Color>();
-        Dictionary<short, short> colorGradients = new Dictionary<short, short>();
+        //Dictionary<short, short> colorGradients = new Dictionary<short, short>();
         //List<Color> colorList;
 
         private KinectWorker kinectWorker;
@@ -169,8 +169,7 @@ namespace KinectSandbox
             if (null != this.kinectWorker)
             {
                 this.kinectWorker.Stop();
-                this.topographicWorker.Stop();
-                this.stabilizingWorker.Stop();
+                
             }
             
         }
@@ -223,8 +222,6 @@ namespace KinectSandbox
         {
             this.Log().Debug("Stopping KinectWorker (user request)");
             this.kinectWorker.Stop();
-            this.topographicWorker.Stop();
-            this.stabilizingWorker.Stop();
 
             this.btStart.IsEnabled = true;
             this.btStop.IsEnabled = false;

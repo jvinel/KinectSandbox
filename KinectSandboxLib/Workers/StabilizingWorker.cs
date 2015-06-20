@@ -48,8 +48,13 @@ namespace KinectSandboxLib.Workers
 
             for (int i = 0; i < sourceData.Length; i++)
             {
-                short newValue = sourceData[i].Depth;
-                short oldValue = tempData[i].Depth;
+                int x = i % 640;
+                int y = i / 640;
+                // Check if current index is located inside data specified
+                if ((x >= this.StartPoint.X) && (y >= this.StartPoint.Y) && (x < this.StartPoint.X + this.Width) && (y < this.StartPoint.Y + this.Height))
+                {
+                    short newValue = sourceData[i].Depth;
+                    short oldValue = tempData[i].Depth;
                     if (isValid(newValue))
                     {
                         // New value is valid
@@ -70,6 +75,7 @@ namespace KinectSandboxLib.Workers
                         }
 
                     }
+                }
                     
                 }
 

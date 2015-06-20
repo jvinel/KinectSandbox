@@ -36,6 +36,8 @@ namespace KinectSandboxLib.Workers
         /// </summary>
         private bool requestStop = false;
 
+        
+
         /// <summary>
         /// Event raised when a new depth frame is received from the Kinect device
         /// </summary>
@@ -104,6 +106,7 @@ namespace KinectSandboxLib.Workers
                 {
                     this.sensor.Stop();
                 }
+                OnDataReady(new DataReadyEventArgs(this.depthPixels,true));
             }
             catch (IOException)
             {
@@ -148,19 +151,7 @@ namespace KinectSandboxLib.Workers
             }
         }
 
-        /// <summary>
-        /// Define boundng box of data to be treated.
-        /// Data outside this bounding box are ignored.
-        /// </summary>
-        /// <param name="p">Origin point</param>
-        /// <param name="width">Bounding box width</param>
-        /// <param name="height">Bounding box height</param>
-        public void setBoundingBox(System.Drawing.Point p, int width, int height)
-        {
-            this.StartPoint = p;
-            this.Width = width;
-            this.Height = height;
-        }
+        
 
 
         

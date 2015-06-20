@@ -61,6 +61,20 @@ namespace KinectSandboxLib.Filters
         }
 
         /// <summary>
+        /// Define boundng box of data to be treated.
+        /// Data outside this bounding box are ignored.
+        /// </summary>
+        /// <param name="p">Origin point</param>
+        /// <param name="width">Bounding box width</param>
+        /// <param name="height">Bounding box height</param>
+        public void setBoundingBox(System.Drawing.Point p, int width, int height)
+        {
+            this.StartPoint = p;
+            this.Width = width;
+            this.Height = height;
+        }
+
+        /// <summary>
         /// Handler of data ready to be processed
         /// </summary>
         /// <param name="e"></param>

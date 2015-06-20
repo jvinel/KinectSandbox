@@ -24,6 +24,8 @@ namespace KinectSandboxLib.Workers
         /// </summary>
         public Bitmap Gradient { get; set; }
 
+        public int Isolines { get; set; }
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -31,7 +33,7 @@ namespace KinectSandboxLib.Workers
         public TopographicWorker(DataFilterInput dataFilterInput)
             : base(dataFilterInput)
         {
-            
+            this.Isolines = 0;
         }
 
         /// <summary>
@@ -56,42 +58,52 @@ namespace KinectSandboxLib.Workers
                 ColorizedAlpha cAlpha = new ColorizedAlpha(this.Gradient);
                 final = cAlpha.Apply(final);
             }
-
-            // Generate isolines (startting at level 10, step 25)
-            int level = 10;
-
-            // Isolines bitmap will receive every islone generated, then added to final image
-            Bitmap isolines = new Bitmap(this.Width, this.Height, PixelFormat.Format8bppIndexed);
-            while (level < 255)
+            else
             {
-                // Every point over level will be set to black, otherwise white (easier and faster for edge detection)
-                Threshold threshold = new Threshold(level);
-                Bitmap temp = threshold.Apply(source);
-
-                // Detect Edge using sobel alogorithmn
-                //SobelEdgeDetector sobel = new SobelEdgeDetector();
-                Edges sobel = new Edges();
-                temp = sobel.Apply(temp);
-
-                // Add edge bitmap to tempora
-                Add filter = new Add(temp);
-                //filter.SourcePercent = 0.6;
+                // Convert isolines to rgb (to merge with final image)
+                GrayscaleToRGB gtoRGB = new GrayscaleToRGB();
                 // apply the filter
-                filter.ApplyInPlace(isolines);
-
-                // Set next level value
-                level = level + 25;
+                final = gtoRGB.Apply(final);
             }
-            
-            // Convert isolines to rgb (to merge with final image)
-            GrayscaleToRGB gtoRGB = new GrayscaleToRGB();
-            // apply the filter
-            Bitmap rgbIsoline = gtoRGB.Apply(isolines);
 
-            // Add isolines to final image
-            CustomMorph cMorph = new CustomMorph(rgbIsoline);
-            cMorph.SourcePercent = 0.5;
-            final = cMorph.Apply(final);
+            if (Isolines > 0)
+            {
+                // Generate isolines (startting at level 10, step 25)
+                int level = (int) Math.Round((double) (255/this.Isolines));
+                int step = level;
+                // Isolines bitmap will receive every islone generated, then added to final image
+                Bitmap isolines = new Bitmap(this.Width, this.Height, PixelFormat.Format8bppIndexed);
+                while (level < 255)
+                {
+                    // Every point over level will be set to black, otherwise white (easier and faster for edge detection)
+                    Threshold threshold = new Threshold(level);
+                    Bitmap temp = threshold.Apply(source);
+
+                    // Detect Edge using sobel alogorithmn
+                    //SobelEdgeDetector sobel = new SobelEdgeDetector();
+                    Edges sobel = new Edges();
+                    temp = sobel.Apply(temp);
+
+                    // Add edge bitmap to tempora
+                    Add filter = new Add(temp);
+                    //filter.SourcePercent = 0.6;
+                    // apply the filter
+                    filter.ApplyInPlace(isolines);
+
+                    // Set next level value
+                    level = level + step;
+                }
+
+                // Convert isolines to rgb (to merge with final image)
+                GrayscaleToRGB gtoRGB = new GrayscaleToRGB();
+                // apply the filter
+                Bitmap rgbIsoline = gtoRGB.Apply(isolines);
+
+                // Add isolines to final image
+                CustomMorph cMorph = new CustomMorph(rgbIsoline);
+                cMorph.SourcePercent = 0.5;
+                final = cMorph.Apply(final);
+            }
 
             // Pass bitmap generated to UI (or other filter)
             OnOutputDataReady(new BitmapReadyEventArgs(final));

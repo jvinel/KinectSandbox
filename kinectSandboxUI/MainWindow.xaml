@@ -6,24 +6,175 @@
         xmlns:Properties="clr-namespace:kinectSandboxUI.Properties" 
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         x:Class="KinectSandboxUI.MainWindow"
-        Title="MainWindow" Height="600" Width="800" Loaded="Window_Loaded">
+        Title="Kinect Sandbox" Height="650" Width="800" Loaded="Window_Loaded" MinHeight="650" MinWidth="800" Closing="Window_Closing" KeyDown="Window_KeyDown" >
     <Window.Resources>
     </Window.Resources>
-    <Grid>
-        <avalonDock:DockingManager x:Name="dockingManager" BorderThickness="2">
-            <avalonDock:LayoutRoot>
-                <avalonDock:LayoutPanel Orientation="Horizontal">
-                    <avalonDock:LayoutDocumentPane/>
-                    <avalonDock:LayoutAnchorablePane DockWidth="220">
-                        <avalonDock:LayoutAnchorable Title="Settings" CanClose="False" CanHide="False">
-                            <xctk:PropertyGrid HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" x:Name="wpgMyControl"  Loaded="wpgMyControl_Loaded" SelectedObject="{Binding}" >
-                                
-                            </xctk:PropertyGrid>
-                        </avalonDock:LayoutAnchorable>
-                    </avalonDock:LayoutAnchorablePane>
-                </avalonDock:LayoutPanel>
-
-            </avalonDock:LayoutRoot>
-        </avalonDock:DockingManager>
+    <Grid Background="#FF1F1F1F" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Menu IsMainMenu="True">
+            <MenuItem Header="_File" >
+                <MenuItem Header="_Settings" Click="MenuItemSettings_Click" Name="menSettings">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/gear_16xLG.png" Width="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="_Quit" Click="MenuItem_Click" >
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/out-session-icone-9085-32.png" Width="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="_Help" >
+                <MenuItem Header="_About" >
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/InfoTooltip_16x.png" Width="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,5,5,0">
+            <Button Name="btStart" Margin="5,0,0,0" Click="btStart_Click">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/Resources/Symbols_Play_32xLG.png" Width="20"/>
+                    <Label Content="Start"/>
+                </StackPanel>
+            </Button>
+            
+            <Button Name="btStop" Margin="5,0,0,0" IsEnabled="False" Click="btStop_Click">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/Resources/Symbols_Stop_32xLG.png" Width="20"/>
+                    <Label Content="Stop"/>
+                </StackPanel>
+            </Button>
+            <Button Name="btSelect" Margin="40,0,0,0" Click="btSelect_Click" IsEnabled="False" Visibility="Hidden">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/Resources/PlanePreview.png" Width="16"/>
+                    <Label Content="Select"/>
+                </StackPanel>
+            </Button>
+            <Button Name="btSaveImage" Margin="40,0,0,0" IsEnabled="False" Click="btSaveImage_Click">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/Resources/Save_6530.png" Width="16"/>
+                    <Label Content="Save"/>
+                </StackPanel>
+            </Button>
+            <Button Name="btoutput" Margin="40,0,0,0"  Click="btoutput_Click" ToolTip="View output window (F11)">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/Resources/Launch_7018.png" Width="16"/>
+                    <Label Content="Output"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Image Grid.Column="0" Name="img" Margin="5" Stretch="UniformToFill" StretchDirection="Both"/>
+            <StackPanel Orientation="Vertical" Grid.Column="1" Width="200" >
+                <GroupBox Header="General"  BorderBrush="White" Margin="5">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Min. Depth:" Grid.Column="0" Grid.Row="0" Margin="0,5,0,0"/>
+                        <TextBox Name="txtMinDepth" Grid.Column="1" Grid.Row="0" Margin="0,5,0,0" Text="{Binding Source={StaticResource Settings}, Path=Default.MinDepth}"/>
+                        <Label Content="Max. Depth:" Grid.Column="0" Grid.Row="1" Margin="0,5,0,0"/>
+                        <TextBox Name="txtMaxDepth" Grid.Column="1" Grid.Row="1" Margin="0,5,0,0" Text="{Binding Source={StaticResource Settings}, Path=Default.MaxDepth}"/>
+                        <CheckBox Name="ckStabilization" Grid.ColumnSpan="2" Grid.Row="2" FlowDirection="RightToLeft" Content="      :Stabilization" HorizontalAlignment="Left" Margin="5,5,0,0" IsChecked="{Binding Source={StaticResource Settings}, Path=Default.Stabilization}"/>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Header="Filtering" BorderBrush="White" Margin="5">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Isolines:" Grid.Column="0" Grid.Row="0" Margin="0,5,0,0"/>
+                        <TextBox Name="txtIsolines" Grid.Column="1" Grid.Row="0" Margin="0,5,0,0" Text="{Binding Source={StaticResource Settings}, Path=Default.Isolines}"/>
+                        <Label Content="Gradient:" Grid.Column="0" Grid.Row="1" Margin="0,5,0,0"/>
+                        <ComboBox Name="cbGradient" Grid.Column="1" Grid.Row="1" Margin="0,5,0,0"/>
+                    </Grid>
+                </GroupBox>
+                <Button Name="btApplyConfig" Margin="10" Click="btApplyConfig_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Resources/applycodechanges_6548.png" Width="16"/>
+                        <Label Content="Apply"/>
+                    </StackPanel>
+                </Button>
+                <GroupBox Header="Output"  BorderBrush="White" Margin="5" >
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Rotation:" Grid.Column="0" Grid.Row="0" Margin="0,5,0,0"/>
+                        <ComboBox Name="cbRotation" Grid.Column="1" Grid.Row="0" Margin="0,5,0,0" />
+                        <Label Content="Top:" Grid.Column="0" Grid.Row="1" Margin="0,5,0,0"/>
+                        <TextBox Name="txtOutputTop" Grid.Column="1" Grid.Row="1" Margin="0,5,0,0" Text="{Binding Source={StaticResource Settings}, Path=Default.OutputTop, Mode=TwoWay}" IsReadOnly="True"/>
+                        <Label Content="Left:" Grid.Column="0" Grid.Row="2" Margin="0,5,0,0"/>
+                        <TextBox Name="txtOutputLeft" Grid.Column="1" Grid.Row="2" Margin="0,5,0,0" Text="{Binding Source={StaticResource Settings}, Path=Default.OutputLeft, Mode=TwoWay}" IsReadOnly="True"/>
+                        <Label Content="Hight:" Grid.Column="0" Grid.Row="3" Margin="0,5,0,0"/>
+                        <TextBox Name="txtOutputHeight" Grid.Column="1" Grid.Row="3" Margin="0,5,0,0" Text="{Binding Source={StaticResource Settings}, Path=Default.OutputHeight, Mode=TwoWay}" IsReadOnly="True"/>
+                        <Label Content="Width:" Grid.Column="0" Grid.Row="4" Margin="0,5,0,0"/>
+                        <TextBox Name="txtOutputWidth" Grid.Column="1" Grid.Row="4" Margin="0,5,0,0" Text="{Binding Source={StaticResource Settings}, Path=Default.OutputWidth, Mode=TwoWay}" IsReadOnly="True"/>
+                        <CheckBox Name="ckFlipHorizontal" Grid.ColumnSpan="2" Grid.Row="5" FlowDirection="RightToLeft" Content="      :Flip Horizontal" HorizontalAlignment="Left" Margin="5,5,0,0" IsChecked="{Binding Source={StaticResource Settings}, Path=Default.FlipHorizontal}"/>
+                    </Grid>
+                </GroupBox>
+                <Button Name="btApplyoutput" Margin="10" Click="btApplyoutput_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Resources/applycodechanges_6548.png" Width="16"/>
+                        <Label Content="Apply"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
+        <StatusBar Grid.Row="3" Height="24" Foreground="White" Name="statusBar">
+            <StatusBar.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="100" />
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ItemsPanelTemplate>
+            </StatusBar.ItemsPanel>
+            <StatusBarItem Grid.Column="0">
+                <TextBlock Text="" Name="statsbarText" />
+            </StatusBarItem>
+            <Separator Grid.Column="1" />
+            <StatusBarItem Grid.Column="2">
+                <TextBlock Text="" Name="statsbarFps" />
+            </StatusBarItem>
+        </StatusBar>
+        <Canvas Name="dragSelectionCanvas" Visibility="Collapsed">
+            <Border Name="dragSelectionBorder" BorderBrush="Blue" BorderThickness="1" Background="LightBlue" CornerRadius="1" Opacity="0.5" />
+        </Canvas>
     </Grid>
 </Window>
