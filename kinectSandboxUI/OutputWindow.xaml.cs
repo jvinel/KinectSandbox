@@ -41,6 +41,7 @@ namespace kinectSandboxUI
             this.imageOutput.Source = colorBitmap;
             this.WindowState = WindowState.Maximized;
             this.updateLayout();
+            Selector.SetIsSelected(this.contentControl, true);
         }
 
         private Screen GetScreen()
@@ -96,10 +97,7 @@ namespace kinectSandboxUI
             {
                 this.Close();
             }
-            if (e.Key == Key.F12)
-            {
-                Selector.SetIsSelected(this.contentControl, true);
-            }
+           
         }
 
        

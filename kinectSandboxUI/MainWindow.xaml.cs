@@ -134,7 +134,14 @@ namespace KinectSandboxUI
             this.cbRotation.ItemsSource = this.rotationList;
             this.cbRotation.DisplayMemberPath = "Label";
             this.cbRotation.SelectedValuePath = "Id";
-            this.cbRotation.SelectedIndex = 0;
+            foreach (kinectSandboxUI.Rotation rotation in this.cbRotation.ItemsSource)
+            {
+                if (rotation.Id == kinectSandboxUI.Properties.Settings.Default.Rotation)
+                {
+                    this.cbRotation.SelectedItem = rotation;
+                    break;
+                }
+            }
             // Configure combobox gradient
             this.cbGradient.ItemsSource=this.loadGradient(kinectSandboxUI.Properties.Settings.Default.GradientPath);
             this.cbGradient.DisplayMemberPath = "Label";
@@ -151,8 +158,7 @@ namespace KinectSandboxUI
 
             // Initialize output bitmap
             this.colorBitmap = new WriteableBitmap(640, 480, 96.0, 96.0, PixelFormats.Bgr32, null);
-            // Set the image we display to point to the bitmap where we'll put the image data
-            this.img.Source = this.colorBitmap;
+            
             
         }
 
@@ -183,7 +189,7 @@ namespace KinectSandboxUI
                     }
                 }
                 kinectSandboxUI.Properties.Settings.Default.Gradient = ((Gradient)this.cbGradient.SelectedItem).Label;
-                kinectSandboxUI.Properties.Settings.Default.Save();
+                
             }
         }
 
@@ -196,7 +202,7 @@ namespace KinectSandboxUI
         {
             kinectSandboxUI.Properties.Settings.Default.Gradient = ((Gradient)this.cbGradient.SelectedItem).Label;
             kinectSandboxUI.Properties.Settings.Default.Rotation = ((kinectSandboxUI.Rotation)this.cbRotation.SelectedItem).Id;
-            kinectSandboxUI.Properties.Settings.Default.Save();
+            
             
             if (this.isRunning)
             {
@@ -276,6 +282,8 @@ namespace KinectSandboxUI
         /// </summary>
         private void launchWorkers()
         {
+            // Set the image we display to point to the bitmap where we'll put the image data
+            this.img.Source = this.colorBitmap;
             // Initialize Kinect Worker
             this.kinectWorker = new KinectWorker();
             this.kinectWorker.MinDepth = (int) kinectSandboxUI.Properties.Settings.Default.MinDepth;
@@ -449,6 +457,7 @@ namespace KinectSandboxUI
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             this.stopWorkers();
+            this.saveSettings();
             if (outputWindow != null)
             {
                 outputWindow.Close();
@@ -727,7 +736,12 @@ namespace KinectSandboxUI
             }
         }
 
-        
+        private void saveSettings()
+        {
+            kinectSandboxUI.Properties.Settings.Default.Gradient = ((Gradient)this.cbGradient.SelectedItem).Label;
+            kinectSandboxUI.Properties.Settings.Default.Rotation = ((kinectSandboxUI.Rotation)this.cbRotation.SelectedItem).Id;
+            kinectSandboxUI.Properties.Settings.Default.Save();
+        }
         
     }
 }

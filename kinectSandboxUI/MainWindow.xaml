@@ -76,7 +76,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Image Grid.Column="0" Name="img" Margin="5" Stretch="UniformToFill" StretchDirection="Both"/>
+            <Image Grid.Column="0" Name="img" Margin="5" Stretch="UniformToFill" StretchDirection="Both" Source="Resources/background.jpg"/>
             <StackPanel Orientation="Vertical" Grid.Column="1" Width="200" >
                 <GroupBox Header="General"  BorderBrush="White" Margin="5">
                     <Grid>
