@@ -41,5 +41,17 @@
     <Setting Name="OutputWidth" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">800</Value>
     </Setting>
+    <Setting Name="TopX" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="TopY" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="SelectionWidth" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">640</Value>
+    </Setting>
+    <Setting Name="SelectionHeight" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">480</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

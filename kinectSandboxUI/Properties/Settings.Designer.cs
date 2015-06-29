@@ -178,5 +178,53 @@ namespace kinectSandboxUI.Properties {
                 this["OutputWidth"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int TopX {
+            get {
+                return ((int)(this["TopX"]));
+            }
+            set {
+                this["TopX"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int TopY {
+            get {
+                return ((int)(this["TopY"]));
+            }
+            set {
+                this["TopY"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("640")]
+        public int SelectionWidth {
+            get {
+                return ((int)(this["SelectionWidth"]));
+            }
+            set {
+                this["SelectionWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("480")]
+        public int SelectionHeight {
+            get {
+                return ((int)(this["SelectionHeight"]));
+            }
+            set {
+                this["SelectionHeight"] = value;
+            }
+        }
     }
 }

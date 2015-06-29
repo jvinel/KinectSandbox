@@ -91,6 +91,12 @@ namespace kinectSandboxUI
             this.imageOutput.Dispatcher.Invoke(DispatcherPriority.Render, EmptyDelegate);
         }
 
+        public void updateBitmap(WriteableBitmap colorBitmap)
+        {
+            this.colorBitmap = colorBitmap;
+            this.imageOutput.Source = colorBitmap;
+        }
+
         private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (e.Key == Key.F11)

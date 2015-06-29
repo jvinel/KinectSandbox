@@ -55,33 +55,44 @@ namespace KinectSandboxLib.Tools
             // Start point equals to yOrigin*640 (line width=640 + xOrigin 
             int start = yOrigin * 640 + xOrigin;
             int end = (yOrigin + height) * 640 + xOrigin + width;
-            for (int i = start; i < end; ++i)
+            int cpt = start;
+            while (cpt < end) 
             {
-                int x = i % 640;
-                int y = i / 640;
+                int x = (cpt % 640);
+                int y = (cpt / 640);
+                
+                int yOutput = y - yOrigin;
+                int xOutput = x - xOrigin ;
+                
                 // Check if current index is located inside data specified
-                if ((x >= xOrigin) && (y >= yOrigin) && (x < xOrigin + width) && (y < yOrigin + height))
+                if ((xOutput >= 0) && (yOutput >= 0) && (xOutput < width) && (yOutput<height))
                 {
-                    int depth = depthPixels[i].Depth;
+                    int depth = depthPixels[cpt].Depth;
                     // Check depth regarding boundaries
                     if ((depth > minDepth) && (depth < maxDepth))
                     {
                         int intensity = 255 - (((depth - minDepth) * 255) / (maxDepth - minDepth));
                         // Scale intensity to a 0..255 interval
-                        lockBitmap.SetPixel(x - xOrigin, y - yOrigin, Color.FromArgb(intensity, intensity, intensity));
+                        lockBitmap.SetPixel(xOutput, yOutput, Color.FromArgb(intensity, intensity, intensity));
 
                     }
                     else
                     {
                         if (depth <= minDepth)
                         {
-                            lockBitmap.SetPixel(x - xOrigin, y - yOrigin, Color.White);
+                            lockBitmap.SetPixel(xOutput, yOutput, Color.White);
                         }
                         else
                         {
-                            lockBitmap.SetPixel(x - xOrigin, y - yOrigin, Color.Black);
+                            lockBitmap.SetPixel(xOutput, yOutput, Color.Black);
                         }
                     }
+                    cpt++;
+                }
+                else
+                {
+                    // Got to next line
+                    cpt = (y + 1) * 640 + xOrigin;
                 }
             }
             lockBitmap.UnlockBits();

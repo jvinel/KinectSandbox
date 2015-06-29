@@ -97,6 +97,12 @@ namespace KinectSandboxUI
         /// </summary>
         private int selectionHeight=480;
 
+
+        private int selectedWidth = 640;
+        private int selectedHeight = 480;
+
+
+        private bool selectedWindow = false;
         private OutputWindow outputWindow;
 
         [DllImport("kernel32.dll", EntryPoint = "RtlMoveMemory")]
@@ -156,8 +162,19 @@ namespace KinectSandboxUI
                 }
             }
 
+            this.startPoint = new System.Drawing.Point(kinectSandboxUI.Properties.Settings.Default.TopX, kinectSandboxUI.Properties.Settings.Default.TopY);
+            this.selectedWidth = kinectSandboxUI.Properties.Settings.Default.SelectionWidth;
+            this.selectedHeight = kinectSandboxUI.Properties.Settings.Default.SelectionHeight;
+
+            if ((this.startPoint.X != 0) || (this.startPoint.Y != 0) || (this.selectedHeight != 480) || (this.selectedWidth != 640))
+            {
+                this.lblbtSelect.Content = "Reset sel.";
+                this.selectedWindow = true;
+                this.btSelect.IsEnabled = true;
+            }
+
             // Initialize output bitmap
-            this.colorBitmap = new WriteableBitmap(640, 480, 96.0, 96.0, PixelFormats.Bgr32, null);
+            this.colorBitmap = new WriteableBitmap(this.selectionWidth, this.selectionHeight   , 96.0, 96.0, PixelFormats.Bgr32, null);
             
             
         }
@@ -282,20 +299,28 @@ namespace KinectSandboxUI
         /// </summary>
         private void launchWorkers()
         {
+            // Initialize output bitmap
+            this.colorBitmap = new WriteableBitmap(this.selectedWidth, this.selectedHeight, 96.0, 96.0, PixelFormats.Bgr32, null);
             // Set the image we display to point to the bitmap where we'll put the image data
             this.img.Source = this.colorBitmap;
+
+            if (outputWindow != null)
+            {
+                outputWindow.updateBitmap(this.colorBitmap);
+
+            }
             // Initialize Kinect Worker
             this.kinectWorker = new KinectWorker();
             this.kinectWorker.MinDepth = (int) kinectSandboxUI.Properties.Settings.Default.MinDepth;
             this.kinectWorker.MaxDepth = (int) kinectSandboxUI.Properties.Settings.Default.MaxDepth;
-            this.kinectWorker.setBoundingBox(this.startPoint, this.selectionWidth, this.selectionHeight);
+            this.kinectWorker.setBoundingBox(this.startPoint, this.selectedWidth, this.selectedHeight);
             // If stabilization required Initialize StabilizingWorker
             if (kinectSandboxUI.Properties.Settings.Default.Stabilization)
             {
                 this.stabilizingWorker = new StabilizingWorker(this.kinectWorker);
                 this.stabilizingWorker.MinDepth = (int) kinectSandboxUI.Properties.Settings.Default.MinDepth;
                 this.stabilizingWorker.MaxDepth = (int) kinectSandboxUI.Properties.Settings.Default.MaxDepth;
-                this.stabilizingWorker.setBoundingBox(this.startPoint, this.selectionWidth, this.selectionHeight);
+                this.stabilizingWorker.setBoundingBox(this.startPoint, this.selectedWidth, this.selectedHeight);
             }
             Bitmap gradient=this.getGradient();
             if (kinectSandboxUI.Properties.Settings.Default.Stabilization)
@@ -309,7 +334,7 @@ namespace KinectSandboxUI
             this.topographicWorker.MinDepth = (int) kinectSandboxUI.Properties.Settings.Default.MinDepth;
             this.topographicWorker.MaxDepth = (int) kinectSandboxUI.Properties.Settings.Default.MaxDepth;
             this.topographicWorker.Isolines = (int) kinectSandboxUI.Properties.Settings.Default.Isolines;
-            this.topographicWorker.setBoundingBox(this.startPoint, this.selectionWidth, this.selectionHeight);
+            this.topographicWorker.setBoundingBox(this.startPoint, this.selectedWidth, this.selectedHeight);
             if (gradient != null)
             {
                 this.topographicWorker.Gradient = gradient;
@@ -413,16 +438,20 @@ namespace KinectSandboxUI
 
         private void DrawImage2(Bitmap bitmap)
         {
-             BitmapData data = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-             Byte[] Pixels = new Byte[bitmap.Height * data.Stride];
-             Marshal.Copy(data.Scan0, Pixels, 0, Pixels.Length);
-             Int32Rect Rect = new Int32Rect((int)this.startPoint.X, (int)this.startPoint.Y, bitmap.Width, bitmap.Height);
-             this.colorBitmap.Lock();
-             this.colorBitmap.WritePixels(Rect, Pixels, data.Stride, 0);
-             this.colorBitmap.AddDirtyRect(Rect);
-             this.colorBitmap.Unlock();
-             bitmap.UnlockBits(data);
-             bitmap.Dispose();
+            // Skip image with a bad format (can occur when changing screen zone selection
+            if ((bitmap.Width == this.colorBitmap.Width) && (bitmap.Height == this.colorBitmap.Height))
+            {
+                BitmapData data = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                Byte[] Pixels = new Byte[bitmap.Height * data.Stride];
+                Marshal.Copy(data.Scan0, Pixels, 0, Pixels.Length);
+                Int32Rect Rect = new Int32Rect(0, 0, bitmap.Width, bitmap.Height);
+                this.colorBitmap.Lock();
+                this.colorBitmap.WritePixels(Rect, Pixels, data.Stride, 0);
+                this.colorBitmap.AddDirtyRect(Rect);
+                this.colorBitmap.Unlock();
+                bitmap.UnlockBits(data);
+                bitmap.Dispose();
+            }
         }
 
         private void displayInfo(string txt) {
@@ -505,22 +534,25 @@ namespace KinectSandboxUI
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.ChangedButton == MouseButton.Left)
+            if (!selectedWindow)
             {
-                origMouseDownPoint = new System.Windows.Point((int)e.GetPosition(this).X, (int)e.GetPosition(this).Y);
-
-                Console.WriteLine("Mouse over image: " + this.img.IsMouseOver);
-                isLeftMouseButtonDownOnWindow = this.img.IsMouseOver;
-
-                if (isLeftMouseButtonDownOnWindow)
+                if (e.ChangedButton == MouseButton.Left)
                 {
-                    System.Windows.Point relativePoint = this.img.TransformToAncestor(this).Transform(new System.Windows.Point(0, 0));
-                    this.displayInfo((int)(origMouseDownPoint.X - relativePoint.X) + "/" + (int)(origMouseDownPoint.Y - relativePoint.Y));
-                    this.btSelect.IsEnabled = false;
-                    this.CaptureMouse();
-                }
+                    origMouseDownPoint = new System.Windows.Point((int)e.GetPosition(this).X, (int)e.GetPosition(this).Y);
 
-                e.Handled = true;
+
+                    isLeftMouseButtonDownOnWindow = this.img.IsMouseOver;
+
+                    if (isLeftMouseButtonDownOnWindow)
+                    {
+                        System.Windows.Point relativePoint = this.img.TransformToAncestor(this).Transform(new System.Windows.Point(0, 0));
+                        this.displayInfo((int)(origMouseDownPoint.X - relativePoint.X) + "/" + (int)(origMouseDownPoint.Y - relativePoint.Y));
+                        this.btSelect.IsEnabled = false;
+                        this.CaptureMouse();
+                    }
+
+                    e.Handled = true;
+                }
             }
         }
 
@@ -582,95 +614,123 @@ namespace KinectSandboxUI
 
         private void Window_MouseMove(object sender, MouseEventArgs e)
         {
-            if (isDraggingSelectionRect)
+            if (!selectedWindow)
             {
-                //
-                // Drag selection is in progress.
-                //
-                System.Windows.Point curMouseDownPoint = e.GetPosition(this);
-                UpdateDragSelectionRect(origMouseDownPoint, curMouseDownPoint);
-
-                e.Handled = true;
-            }
-            else if (isLeftMouseButtonDownOnWindow)
-            {
-
-
-                //
-                // The user is left-dragging the mouse,
-                // but don't initiate drag selection until
-                // they have dragged past the threshold value.
-                //
-                System.Windows.Point curMouseDownPoint = e.GetPosition(this);
-                var dragDelta = curMouseDownPoint - origMouseDownPoint;
-                double dragDistance = Math.Abs(dragDelta.Length);
-                if (dragDistance > DragThreshold)
+                if (isDraggingSelectionRect)
                 {
                     //
-                    // When the mouse has been dragged more than the threshold value commence drag selection.
+                    // Drag selection is in progress.
                     //
-                    isDraggingSelectionRect = true;
+                    System.Windows.Point curMouseDownPoint = e.GetPosition(this);
+                    UpdateDragSelectionRect(origMouseDownPoint, curMouseDownPoint);
 
-                    //
-                    //  Clear selection immediately when starting drag selection.
-                    //
-
-
-                    InitDragSelectionRect(origMouseDownPoint, curMouseDownPoint);
+                    e.Handled = true;
                 }
+                else if (isLeftMouseButtonDownOnWindow)
+                {
 
 
-                e.Handled = true;
+                    //
+                    // The user is left-dragging the mouse,
+                    // but don't initiate drag selection until
+                    // they have dragged past the threshold value.
+                    //
+                    System.Windows.Point curMouseDownPoint = e.GetPosition(this);
+                    var dragDelta = curMouseDownPoint - origMouseDownPoint;
+                    double dragDistance = Math.Abs(dragDelta.Length);
+                    if (dragDistance > DragThreshold)
+                    {
+                        //
+                        // When the mouse has been dragged more than the threshold value commence drag selection.
+                        //
+                        isDraggingSelectionRect = true;
+
+                        //
+                        //  Clear selection immediately when starting drag selection.
+                        //
+
+
+                        InitDragSelectionRect(origMouseDownPoint, curMouseDownPoint);
+                    }
+
+
+                    e.Handled = true;
+                }
             }
         }
 
         private void Window_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            if (e.ChangedButton == MouseButton.Left)
+            if (!selectedWindow)
             {
-                if (isDraggingSelectionRect)
+                if (e.ChangedButton == MouseButton.Left)
                 {
-                    //
-                    // Drag selection has ended, apply the 'selection rectangle'.
-                    //
-
-                    isDraggingSelectionRect = false;
-                    e.Handled = true;
-                    System.Windows.Point endPoint = e.GetPosition(this);
-                    System.Windows.Point relativePoint = this.img.TransformToAncestor(this).Transform(new System.Windows.Point(0, 0));
-                    if (endPoint.X > relativePoint.X + 640)
+                    if (isDraggingSelectionRect)
                     {
-                        endPoint.X = relativePoint.X + 640;
+                        //
+                        // Drag selection has ended, apply the 'selection rectangle'.
+                        //
+
+                        isDraggingSelectionRect = false;
+                        e.Handled = true;
+                        System.Windows.Point endPoint = e.GetPosition(this);
+
+                        System.Windows.Point relativePoint = this.img.TransformToAncestor(this).Transform(new System.Windows.Point(0, 0));
+                        if (endPoint.X > relativePoint.X + this.img.ActualWidth)
+                        {
+                            endPoint.X = relativePoint.X + this.img.ActualWidth;
+                        }
+                        if (endPoint.Y > relativePoint.Y + this.img.ActualHeight)
+                        {
+                            endPoint.Y = relativePoint.Y + this.img.ActualHeight;
+                        }
+                        UpdateDragSelectionRect(origMouseDownPoint, endPoint);
+                        this.btSelect.IsEnabled = true;
                     }
-                    if (endPoint.Y > relativePoint.Y + 480)
+
+                    if (isLeftMouseButtonDownOnWindow)
                     {
-                        endPoint.Y = relativePoint.Y + 480;
+                        isLeftMouseButtonDownOnWindow = false;
+                        this.ReleaseMouseCapture();
+
+                        e.Handled = true;
                     }
-                    UpdateDragSelectionRect(origMouseDownPoint, endPoint);
-                    this.btSelect.IsEnabled = true;
-                }
-
-                if (isLeftMouseButtonDownOnWindow)
-                {
-                    isLeftMouseButtonDownOnWindow = false;
-                    this.ReleaseMouseCapture();
-
-                    e.Handled = true;
                 }
             }
         }
 
         private void btSelect_Click(object sender, RoutedEventArgs e)
         {
-            dragSelectionCanvas.Visibility = Visibility.Collapsed;
-            btSelect.IsEnabled = false;
-            if (this.kinectWorker != null)
+            if (!selectedWindow)
             {
+                dragSelectionCanvas.Visibility = Visibility.Collapsed;
+                kinectSandboxUI.Properties.Settings.Default.Gradient = ((Gradient)this.cbGradient.SelectedItem).Label;
+                kinectSandboxUI.Properties.Settings.Default.Rotation = ((kinectSandboxUI.Rotation)this.cbRotation.SelectedItem).Id;
                 System.Windows.Point relativePoint = this.img.TransformToAncestor(this).Transform(new System.Windows.Point(0, 0));
                 System.Drawing.Point top = new System.Drawing.Point((int)(origMouseDownPoint.X - relativePoint.X), (int)(origMouseDownPoint.Y - relativePoint.Y));
-                this.startPoint = top;
-
+                this.startPoint = new System.Drawing.Point((int)((top.X * 640) / this.img.ActualWidth), (int)((top.Y * 480) / this.img.ActualHeight));
+                this.selectedWidth = (int)((this.selectionWidth * 640) / this.img.ActualWidth);
+                this.selectedHeight = (int)((this.selectionHeight * 480) / this.img.ActualHeight);
+                this.lblbtSelect.Content = "Reset sel.";
+                this.selectedWindow = true;
             }
+            else
+            {
+                this.startPoint = new System.Drawing.Point(0, 0);
+                this.selectedWidth = 640;
+                this.selectedHeight = 480;
+                this.lblbtSelect.Content = "Select";
+                this.selectedWindow = false;
+                this.btSelect.IsEnabled = false;
+            }
+
+
+            if (this.isRunning)
+            {
+                this.stopWorkers();
+                this.launchWorkers();
+            }
+
         }
 
         private void btoutput_Click(object sender, RoutedEventArgs e)
@@ -740,6 +800,10 @@ namespace KinectSandboxUI
         {
             kinectSandboxUI.Properties.Settings.Default.Gradient = ((Gradient)this.cbGradient.SelectedItem).Label;
             kinectSandboxUI.Properties.Settings.Default.Rotation = ((kinectSandboxUI.Rotation)this.cbRotation.SelectedItem).Id;
+            kinectSandboxUI.Properties.Settings.Default.TopX = this.startPoint.X;
+            kinectSandboxUI.Properties.Settings.Default.TopY = this.startPoint.Y;
+            kinectSandboxUI.Properties.Settings.Default.SelectionWidth = this.selectedWidth;
+            kinectSandboxUI.Properties.Settings.Default.SelectionHeight = this.selectedHeight;
             kinectSandboxUI.Properties.Settings.Default.Save();
         }
         

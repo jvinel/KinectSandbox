@@ -6,7 +6,7 @@
         xmlns:Properties="clr-namespace:kinectSandboxUI.Properties" 
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         x:Class="KinectSandboxUI.MainWindow"
-        Title="Kinect Sandbox" Height="650" Width="800" Loaded="Window_Loaded" MinHeight="650" MinWidth="800" Closing="Window_Closing" KeyDown="Window_KeyDown" >
+        Title="Kinect Sandbox" Height="650" Width="800" Loaded="Window_Loaded" MinHeight="650" MinWidth="800" Closing="Window_Closing" KeyDown="Window_KeyDown"  MouseDown="Window_MouseDown" MouseMove="Window_MouseMove" MouseUp="Window_MouseUp" >
     <Window.Resources>
     </Window.Resources>
     <Grid Background="#FF1F1F1F" >
@@ -52,10 +52,10 @@
                     <Label Content="Stop"/>
                 </StackPanel>
             </Button>
-            <Button Name="btSelect" Margin="40,0,0,0" Click="btSelect_Click" IsEnabled="False" Visibility="Hidden">
+            <Button Name="btSelect" Margin="40,0,0,0" Click="btSelect_Click" IsEnabled="False">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="/Resources/PlanePreview.png" Width="16"/>
-                    <Label Content="Select"/>
+                    <Label Content="Select" Name="lblbtSelect"/>
                 </StackPanel>
             </Button>
             <Button Name="btSaveImage" Margin="40,0,0,0" IsEnabled="False" Click="btSaveImage_Click">
@@ -76,7 +76,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Image Grid.Column="0" Name="img" Margin="5" Stretch="UniformToFill" StretchDirection="Both" Source="Resources/background.jpg"/>
+            <Image Grid.Column="0" Name="img" Margin="5" Stretch="Uniform" StretchDirection="Both" Source="Resources/background.jpg"/>
             <StackPanel Orientation="Vertical" Grid.Column="1" Width="200" >
                 <GroupBox Header="General"  BorderBrush="White" Margin="5">
                     <Grid>
