@@ -108,11 +108,11 @@ namespace KinectSandboxUI
         /// <summary>
         /// Width of current selection
         /// </summary>
-        private int selectionWidth=640;
+        private int selectionWidth = 640;
         /// <summary>
         /// Height of current selection
         /// </summary>
-        private int selectionHeight=480;
+        private int selectionHeight = 480;
 
 
         private int selectedWidth = 640;
@@ -138,8 +138,8 @@ namespace KinectSandboxUI
             this.Log().Debug("Initialize UI components");
             InitializeComponent();
             // Bind Key
-            
-            
+
+
         }
 
         private void HandlerThatSavesEverthing(object obSender, ExecutedRoutedEventArgs e)
@@ -166,7 +166,7 @@ namespace KinectSandboxUI
                 }
             }
             // Configure combobox gradient
-            this.cbGradient.ItemsSource=this.loadGradient(kinectSandboxUI.Properties.Settings.Default.GradientPath);
+            this.cbGradient.ItemsSource = this.loadGradient(kinectSandboxUI.Properties.Settings.Default.GradientPath);
             this.cbGradient.DisplayMemberPath = "Label";
             this.cbGradient.SelectedValuePath = "Id";
             this.cbGradient.SelectedIndex = 0;
@@ -191,9 +191,9 @@ namespace KinectSandboxUI
             }
 
             // Initialize output bitmap
-            this.colorBitmap = new WriteableBitmap(this.selectionWidth, this.selectionHeight   , 96.0, 96.0, PixelFormats.Bgr32, null);
-            
-            
+            this.colorBitmap = new WriteableBitmap(this.selectionWidth, this.selectionHeight, 96.0, 96.0, PixelFormats.Bgr32, null);
+
+
         }
 
 
@@ -209,7 +209,8 @@ namespace KinectSandboxUI
         private void MenuItemSettings_Click(object sender, RoutedEventArgs e)
         {
             SettingsWindow settingsWindows = new SettingsWindow();
-            if (settingsWindows.ShowDialog()==true) {
+            if (settingsWindows.ShowDialog() == true)
+            {
                 this.cbGradient.ItemsSource = this.loadGradient(kinectSandboxUI.Properties.Settings.Default.GradientPath);
                 this.cbGradient.DisplayMemberPath = "Label";
                 this.cbGradient.SelectedValuePath = "Id";
@@ -223,7 +224,7 @@ namespace KinectSandboxUI
                     }
                 }
                 kinectSandboxUI.Properties.Settings.Default.Gradient = ((Gradient)this.cbGradient.SelectedItem).Label;
-                
+
             }
         }
 
@@ -236,8 +237,8 @@ namespace KinectSandboxUI
         {
             kinectSandboxUI.Properties.Settings.Default.Gradient = ((Gradient)this.cbGradient.SelectedItem).Label;
             kinectSandboxUI.Properties.Settings.Default.Rotation = ((kinectSandboxUI.Rotation)this.cbRotation.SelectedItem).Id;
-            
-            
+
+
             if (this.isRunning)
             {
                 this.stopWorkers();
@@ -257,7 +258,7 @@ namespace KinectSandboxUI
             List<Gradient> result = new List<Gradient>();
             int cpt = 0;
             result.Add(new Gradient(cpt++, ""));
-            
+
             if (Directory.Exists(path))
             {
                 // Load jpg
@@ -265,10 +266,15 @@ namespace KinectSandboxUI
                 foreach (string file in files)
                 {
                     Bitmap gradient = (Bitmap)Bitmap.FromFile(file);
-                    if (gradient.Width == 256)
-                    {
-                        result.Add(new Gradient(cpt++, System.IO.Path.GetFileName(file)));
-                    }
+
+                    result.Add(new Gradient(cpt++, System.IO.Path.GetFileName(file)));
+                }
+                // Load png
+                files = Directory.GetFiles(path, "*.png");
+                foreach (string file in files)
+                {
+                    Bitmap gradient = (Bitmap)Bitmap.FromFile(file);
+                    result.Add(new Gradient(cpt++, System.IO.Path.GetFileName(file)));
                 }
             }
             return result;
@@ -284,29 +290,21 @@ namespace KinectSandboxUI
                     if (File.Exists(System.IO.Path.Combine(kinectSandboxUI.Properties.Settings.Default.GradientPath, kinectSandboxUI.Properties.Settings.Default.Gradient)))
                     {
                         result = (Bitmap)Bitmap.FromFile(System.IO.Path.Combine(kinectSandboxUI.Properties.Settings.Default.GradientPath, kinectSandboxUI.Properties.Settings.Default.Gradient));
-                        if (result.Width == 256)
-                        {
-                            return result;
-                        }
-                        else
-                        {
-                            result = null;
-                            this.displayWarning( "Invalid gradient file. Please review application configuration.");
-                        }
+                        return result;
                     }
                     else
                     {
-                        this.displayWarning( "Unable to find gradient " + System.IO.Path.Combine(kinectSandboxUI.Properties.Settings.Default.GradientPath, kinectSandboxUI.Properties.Settings.Default.Gradient) + ". Please review application configuration.");
+                        this.displayWarning("Unable to find gradient " + System.IO.Path.Combine(kinectSandboxUI.Properties.Settings.Default.GradientPath, kinectSandboxUI.Properties.Settings.Default.Gradient) + ". Please review application configuration.");
                     }
                 }
                 else
                 {
-                    this.displayWarning(  "No gradient file speficied. Please review application configuration.");
+                    this.displayWarning("No gradient file speficied. Please review application configuration.");
                 }
             }
             else
             {
-                this.displayWarning( "No folder specified for gradient image. Please review application settings.");
+                this.displayWarning("No folder specified for gradient image. Please review application settings.");
             }
             return result;
         }
@@ -328,18 +326,18 @@ namespace KinectSandboxUI
             }
             // Initialize Kinect Worker
             this.kinectWorker = new KinectWorker();
-            this.kinectWorker.MinDepth = (int) kinectSandboxUI.Properties.Settings.Default.MinDepth;
-            this.kinectWorker.MaxDepth = (int) kinectSandboxUI.Properties.Settings.Default.MaxDepth;
+            this.kinectWorker.MinDepth = (int)kinectSandboxUI.Properties.Settings.Default.MinDepth;
+            this.kinectWorker.MaxDepth = (int)kinectSandboxUI.Properties.Settings.Default.MaxDepth;
             this.kinectWorker.setBoundingBox(this.startPoint, this.selectedWidth, this.selectedHeight);
             // If stabilization required Initialize StabilizingWorker
             if (kinectSandboxUI.Properties.Settings.Default.Stabilization)
             {
                 this.stabilizingWorker = new StabilizingWorker(this.kinectWorker);
-                this.stabilizingWorker.MinDepth = (int) kinectSandboxUI.Properties.Settings.Default.MinDepth;
-                this.stabilizingWorker.MaxDepth = (int) kinectSandboxUI.Properties.Settings.Default.MaxDepth;
+                this.stabilizingWorker.MinDepth = (int)kinectSandboxUI.Properties.Settings.Default.MinDepth;
+                this.stabilizingWorker.MaxDepth = (int)kinectSandboxUI.Properties.Settings.Default.MaxDepth;
                 this.stabilizingWorker.setBoundingBox(this.startPoint, this.selectedWidth, this.selectedHeight);
             }
-            Bitmap gradient=this.getGradient();
+            Bitmap gradient = this.getGradient();
             if (kinectSandboxUI.Properties.Settings.Default.Stabilization)
             {
                 this.topographicWorker = new TopographicWorker(this.stabilizingWorker);
@@ -348,9 +346,9 @@ namespace KinectSandboxUI
             {
                 this.topographicWorker = new TopographicWorker(this.kinectWorker);
             }
-            this.topographicWorker.MinDepth = (int) kinectSandboxUI.Properties.Settings.Default.MinDepth;
-            this.topographicWorker.MaxDepth = (int) kinectSandboxUI.Properties.Settings.Default.MaxDepth;
-            this.topographicWorker.Isolines = (int) kinectSandboxUI.Properties.Settings.Default.Isolines;
+            this.topographicWorker.MinDepth = (int)kinectSandboxUI.Properties.Settings.Default.MinDepth;
+            this.topographicWorker.MaxDepth = (int)kinectSandboxUI.Properties.Settings.Default.MaxDepth;
+            this.topographicWorker.Isolines = (int)kinectSandboxUI.Properties.Settings.Default.Isolines;
             this.topographicWorker.setBoundingBox(this.startPoint, this.selectedWidth, this.selectedHeight);
             if (gradient != null)
             {
@@ -358,7 +356,7 @@ namespace KinectSandboxUI
             }
             // Wire output data event
             this.topographicWorker.OutputDataReady += new EventHandler<BitmapReadyEventArgs>(worker_OutputDataReady);
-           
+
 
             if (this.kinectWorker.IsKinectReady())
             {
@@ -383,9 +381,9 @@ namespace KinectSandboxUI
                 if (this.kinectWorker != null)
                 {
                     // Launch KinectWorker Thread
-                   kinectThread = new Thread(this.kinectWorker.Start);
-                   kinectThread.Name = "KinectWorker";
-                   kinectThread.Start();
+                    kinectThread = new Thread(this.kinectWorker.Start);
+                    kinectThread.Name = "KinectWorker";
+                    kinectThread.Start();
                 }
                 this.btStart.IsEnabled = false;
                 this.btStop.IsEnabled = true;
@@ -403,7 +401,7 @@ namespace KinectSandboxUI
 
         private void stopWorkers()
         {
-            
+
 
             if ((this.kinectWorker != null) && (this.kinectThread.IsAlive))
             {
@@ -471,7 +469,8 @@ namespace KinectSandboxUI
             }
         }
 
-        private void displayInfo(string txt) {
+        private void displayInfo(string txt)
+        {
             this.statsbarText.Text = txt;
             this.statusBar.Background = System.Windows.Media.Brushes.DarkGray;
         }
@@ -772,7 +771,7 @@ namespace KinectSandboxUI
             {
                 outputWindow = new OutputWindow(this.colorBitmap);
                 outputWindow.Show();
-               
+
             }
             else
             {
@@ -821,7 +820,7 @@ namespace KinectSandboxUI
             }
         }
 
-        
+
         /// <summary>
         /// Change output confgiuration (rotation, flip)
         /// </summary>
@@ -850,6 +849,6 @@ namespace KinectSandboxUI
             kinectSandboxUI.Properties.Settings.Default.SelectionHeight = this.selectedHeight;
             kinectSandboxUI.Properties.Settings.Default.Save();
         }
-        
+
     }
 }

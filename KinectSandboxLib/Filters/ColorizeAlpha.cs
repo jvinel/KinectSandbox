@@ -32,11 +32,20 @@ namespace KinectSandboxLib.Filters
     /// </summary>
     public class ColorizedAlpha : BaseFilter
     {
+        private Bitmap gradientBitmap;
         /// <summary>
         /// Bitmap used to colorize image.
         /// Bitmap must be at least 255 pixel width
         /// </summary>
-        public Bitmap GradientBitmap { get; set; }
+        public Bitmap GradientBitmap {
+            get { return this.gradientBitmap; }
+            set {
+                this.gradientBitmap = value;
+                this.buildColorList();
+            }
+        }
+
+        private Color[] colorList;
 
         /// <summary>
         /// Private format translation dictionary 
@@ -59,10 +68,31 @@ namespace KinectSandboxLib.Filters
         public ColorizedAlpha(Bitmap gradient)
         {
             GradientBitmap = gradient;
+            
+            this.buildColorList();
             // initialize format translation dictionary
             formatTranslations[PixelFormat.Format8bppIndexed] = PixelFormat.Format24bppRgb;
         }
 
+        /// <summary>
+        /// Create a list of 256 colors from the bitmap GradientBitmap
+        /// </summary>
+        private void buildColorList()
+        {
+            this.colorList = new Color[256];
+            float step = (float)((float)this.GradientBitmap.Width / (float)256);
+            // Use lockbitmap to have a fast access on all pixels
+            LockBitmap lockBitmap = new LockBitmap(GradientBitmap);
+            lockBitmap.LockBits();
+            float cpt = 0;
+            for (int i = 0; i < 256; i++) { 
+                    // Get piksel from gradient image
+                    this.colorList[i] = lockBitmap.GetPixel((int)cpt, 0);
+                    cpt += step;
+            }
+            // Unlock bitmap
+            lockBitmap.UnlockBits();
+        }
         /// <summary>
         /// Apply colorize filter, iterating through all bitmap pixels
         /// </summary>
@@ -70,9 +100,7 @@ namespace KinectSandboxLib.Filters
         /// <param name="destinationData"></param>
         protected override unsafe void ProcessFilter(UnmanagedImage sourceData, UnmanagedImage destinationData)
         {
-            // Use lockbitmap to have a fast access on all pixels
-            LockBitmap lockBitmap = new LockBitmap(GradientBitmap);
-            lockBitmap.LockBits();
+            
             // get width and height
             int width = sourceData.Width;
             int height = sourceData.Height;
@@ -91,7 +119,7 @@ namespace KinectSandboxLib.Filters
                 for (int x = 0; x < width; x++, src++, dst += 3)
                 {
                     // Get piksel from gradient image
-                    Color color = lockBitmap.GetPixel(*src, 0);
+                    Color color = this.colorList[*src];
                     // Set color from gradient piksel.
                     dst[RGB.R] = color.R;
                     dst[RGB.G] = color.G;
@@ -101,8 +129,7 @@ namespace KinectSandboxLib.Filters
                 dst += dstOffset;
             }
 
-            // Unlock bitmap
-            lockBitmap.UnlockBits();
+            
         }
     }
 }
