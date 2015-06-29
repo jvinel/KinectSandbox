@@ -659,6 +659,11 @@ namespace KinectSandboxUI
             }
         }
 
+        /// <summary>
+        /// handle when a selection has ended
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_MouseUp(object sender, MouseButtonEventArgs e)
         {
             if (!selectedWindow)
@@ -699,6 +704,11 @@ namespace KinectSandboxUI
             }
         }
 
+        /// <summary>
+        /// Select a part of the kinect sensor frame
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btSelect_Click(object sender, RoutedEventArgs e)
         {
             if (!selectedWindow)
@@ -708,6 +718,7 @@ namespace KinectSandboxUI
                 kinectSandboxUI.Properties.Settings.Default.Rotation = ((kinectSandboxUI.Rotation)this.cbRotation.SelectedItem).Id;
                 System.Windows.Point relativePoint = this.img.TransformToAncestor(this).Transform(new System.Windows.Point(0, 0));
                 System.Drawing.Point top = new System.Drawing.Point((int)(origMouseDownPoint.X - relativePoint.X), (int)(origMouseDownPoint.Y - relativePoint.Y));
+                // Convert origin, width height to sensor frame size
                 this.startPoint = new System.Drawing.Point((int)((top.X * 640) / this.img.ActualWidth), (int)((top.Y * 480) / this.img.ActualHeight));
                 this.selectedWidth = (int)((this.selectionWidth * 640) / this.img.ActualWidth);
                 this.selectedHeight = (int)((this.selectionHeight * 480) / this.img.ActualHeight);
@@ -732,7 +743,11 @@ namespace KinectSandboxUI
             }
 
         }
-
+        /// <summary>
+        /// Display output window
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btoutput_Click(object sender, RoutedEventArgs e)
         {
             kinectSandboxUI.Properties.Settings.Default.Rotation = ((kinectSandboxUI.Rotation)this.cbRotation.SelectedItem).Id;
@@ -757,6 +772,11 @@ namespace KinectSandboxUI
             }
         }
 
+        /// <summary>
+        /// handle press on F11 key to togge output window
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.F11)
@@ -785,7 +805,11 @@ namespace KinectSandboxUI
         }
 
         
-
+        /// <summary>
+        /// Change output confgiuration (rotation, flip)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btApplyoutput_Click(object sender, RoutedEventArgs e)
         {
             if (outputWindow != null)
@@ -796,6 +820,9 @@ namespace KinectSandboxUI
             }
         }
 
+        /// <summary>
+        /// Save settings
+        /// </summary>
         private void saveSettings()
         {
             kinectSandboxUI.Properties.Settings.Default.Gradient = ((Gradient)this.cbGradient.SelectedItem).Label;
