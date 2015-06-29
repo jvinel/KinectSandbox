@@ -13,7 +13,10 @@ User interface provided give access to all settings required to calibrate sensor
 
 All level detections and colorations are performed using an image processing framework [AForge.net] (http://www.aforgenet.com/), and therefore doesn't required any specific graphic card.
 
-Coloring is performed by using a 256 pixels width image:
+Coloring is performed by using a 256 pixels width jpeg image:
 
-![Gradient 1](https://github.com/jvinel/KinectSandbox/blob/master/snapshots/gradient1.jpg)
-![Gradient 3](https://github.com/jvinel/KinectSandbox/blob/master/snapshots/gradient3.jpg)
+* ![Gradient 1](https://github.com/jvinel/KinectSandbox/blob/master/snapshots/gradient1.jpg)
+* ![Gradient 3](https://github.com/jvinel/KinectSandbox/blob/master/snapshots/gradient3.jpg)
+
+
+More information:
