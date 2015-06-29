@@ -19,4 +19,6 @@ Coloring is performed by using a 256 pixels width jpeg image:
 * ![Gradient 3](https://github.com/jvinel/KinectSandbox/blob/master/snapshots/gradient3.jpg)
 
 
-More information:
+More information [KinectSandbox Wiki] (https://github.com/jvinel/KinectSandbox/wiki)
+
+
