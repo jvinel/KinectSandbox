@@ -18,6 +18,7 @@ Coloring is performed by using a 256 pixels width jpeg image:
 * ![Gradient 1](https://github.com/jvinel/KinectSandbox/blob/master/snapshots/gradient1.jpg)
 * ![Gradient 3](https://github.com/jvinel/KinectSandbox/blob/master/snapshots/gradient3.jpg)
 
+Additional colour gradient can be found at [cpt-city](http://soliton.vm.bytemark.co.uk/pub/cpt-city/)
 #License
 
 The KinectSandbox project is covered under a GPL v3 license. The licensing criteria are listed below, as well as at the top of each source file in the repo.
