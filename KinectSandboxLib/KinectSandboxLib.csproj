@@ -61,7 +61,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="Filters\BitmapReadyEventArgs.cs" />
     <Compile Include="Filters\ColorizeAlpha.cs" />
     <Compile Include="Filters\CustomMorph.cs" />

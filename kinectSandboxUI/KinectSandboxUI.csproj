@@ -214,9 +214,6 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="linecons_e02f%280%29_128.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\kinectsandbox.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
