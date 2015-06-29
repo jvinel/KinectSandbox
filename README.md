@@ -15,5 +15,5 @@ All level detections and colorations are performed using an image processing fra
 
 Coloring is performed by using a 256 pixels width image:
 
-![Gradient 1](https://github.com/jvinel/KinectSandbox/blob/master/snapshots/gradient1.png)
-![Gradient 3](https://github.com/jvinel/KinectSandbox/blob/master/snapshots/gradient3.png)
+![Gradient 1](https://github.com/jvinel/KinectSandbox/blob/master/snapshots/gradient1.jpg)
+![Gradient 3](https://github.com/jvinel/KinectSandbox/blob/master/snapshots/gradient3.jpg)
