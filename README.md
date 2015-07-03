@@ -1,6 +1,6 @@
 # KinectSandbox
 
-KinectSandbox is a *.Net* application using a Kinect 1st generation device to create an augmented reality map representing elevation.
+KinectSandbox is a *.Net* application using a Kinect 1st generation device to create an augmented reality terrain map.
 
 Image generated can then be displayed with a video projector on the ground.
 
