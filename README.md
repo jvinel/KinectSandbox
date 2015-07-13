@@ -27,6 +27,8 @@ Additional colour gradient can be found at [cpt-city](http://soliton.vm.bytemark
 
 New setup MSI available: [Setup] (https://github.com/jvinel/KinectSandbox/blob/master/setup/KinectSandboxSetup.msi)
 
+Pre-requisite: Install [Kinect for Windows Runtime v1.8] (http://www.microsoft.com/en-us/download/details.aspx?id=40277)
+
 # License
 
 The KinectSandbox project is covered under a GPL v3 license. The licensing criteria are listed below, as well as at the top of each source file in the repo.
