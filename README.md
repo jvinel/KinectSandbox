@@ -20,11 +20,14 @@ Coloring is performed by using a jpeg or png image:
 
 Additional colour gradient can be found at [cpt-city](http://soliton.vm.bytemark.co.uk/pub/cpt-city/)
 
-# Kinect sandbox in action (Youtube video):
+# Kinect sandbox in action (Youtube):
 [![IMAGE ALT TEXT](http://img.youtube.com/vi/9qb7Utz-vEs/0.jpg)](http://www.youtube.com/watch?v=9qb7Utz-vEs "KinectSandbox - Augmented reality terrain mapping application")
 
+# Setup download
 
-#License
+New setup MSI available: [Setup] (https://github.com/jvinel/KinectSandbox/blob/master/setup/KinectSandboxSetup.msi)
+
+# License
 
 The KinectSandbox project is covered under a GPL v3 license. The licensing criteria are listed below, as well as at the top of each source file in the repo.
 
