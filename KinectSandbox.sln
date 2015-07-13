@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KinectSandboxLib", "KinectS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KinectSandboxUI", "kinectSandboxUI\KinectSandboxUI.csproj", "{0B5A47F9-C130-4F45-A072-555847058B62}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "KinectSandboxSetup", "KinectSandboxSetup\KinectSandboxSetup.vdproj", "{DE863F33-7FA6-4754-914C-E366E5CFC380}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,8 @@ Global
 		{0B5A47F9-C130-4F45-A072-555847058B62}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B5A47F9-C130-4F45-A072-555847058B62}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B5A47F9-C130-4F45-A072-555847058B62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE863F33-7FA6-4754-914C-E366E5CFC380}.Debug|Any CPU.ActiveCfg = Debug
+		{DE863F33-7FA6-4754-914C-E366E5CFC380}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
